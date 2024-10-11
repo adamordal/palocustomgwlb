@@ -1,4 +1,4 @@
-# Palo Alto Firewall Deployment
+# Palo Alto Firewall Deployment with Gateway Load Balancer
 
 ## Prerequisites
 
