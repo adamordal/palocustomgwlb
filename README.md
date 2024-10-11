@@ -3,20 +3,20 @@
 ## Prerequisites
 
 1. **Update the `terraform.tfvars` file**:
-   - You can omit the access/secret access keys if the machine you are running this on already has access to AWS.
-   - Be sure to comment out `access_key` and `secret_key` in `main.tf` if you choose to omit them from the `tfvars` file.
-   - The ec2 ssh keypair must already be created and downloaded. You'll use this to SSH in later. Don't lose it!
-   - You need to update the ami id. You should have already accepted whatever palo alto firewall terms from marketplace related to the ami. This is important!
+    - Omit the access/secret access keys if the machine you are using already has AWS access.
+    - Comment out `access_key` and `secret_key` in `main.tf` if omitted from the `tfvars` file.
+    - Ensure the EC2 SSH keypair is created and downloaded. This will be used for SSH access later.
+    - Update the AMI ID. Accept the Palo Alto firewall terms from the marketplace related to the AMI.
 
 2. **Subnet Requirements**:
-   - The subnet in the `tfvars` file must be at least a `/23`. We are deploying a bunch of subnets.
+    - The subnet in the `tfvars` file must be at least a `/23` to accommodate multiple subnets.
 
 3. **Availability Zones**:
-   - 2 AZs are mandatory. The load balancer requires 2.
+    - 2 AZs are mandatory for the load balancer.
 
 4. **Transit Gateway**:
-   - The transit gateway must already be deployed.
-   - Be sure to update the `tfvars` file with the `txid`.
+    - Ensure the transit gateway is deployed.
+    - Update the `tfvars` file with the `txid`.
 
 ## Topology Diagram
 
@@ -25,15 +25,25 @@
 ## After Deployment
 
 1. **Configure Each Device**:
-   - SSH into each device and copy/paste the following commands. The first `set` command will set the admin password for the web admin. This is user interactive.
+    - SSH into each device and execute the following commands to set the admin password and configure the network:
 
-   ```sh
-   configure
-   set mgt-config users admin password
-   set network interface ethernet ethernet1/1 layer3 dhcp-client enable yes
-   set network interface ethernet ethernet1/1 layer3 dhcp-client accept-default-route yes
-   set network profiles interface-management-profile https-healthcheck https yes
-   set network interface ethernet ethernet1/1 layer3 interface-management-profile https-healthcheck
-   set zone data network layer3 ethernet1/1
-   set network virtual-router default interface ethernet1/1
-   commit
+    ```sh
+    configure
+    set mgt-config users admin password
+    set network interface ethernet ethernet1/1 layer3 dhcp-client enable yes
+    set network interface ethernet ethernet1/1 layer3 dhcp-client accept-default-route yes
+    set network profiles interface-management-profile https-healthcheck https yes
+    set network interface ethernet ethernet1/1 layer3 interface-management-profile https-healthcheck
+    set zone data network layer3 ethernet1/1
+    set network virtual-router default interface ethernet1/1
+    commit
+    ```
+
+    - Traffic is intrazone by default, and Palo Alto allows intrazone traffic. Use security groups to isolate traffic as needed.
+    - Spokes should connect to the txgw, with routing handled automatically. Ensure the spoke has a default route to the txgw for private subnets.
+    - For public ingress access in spoke subnets:
+      - Devices on the public subnet must have public IPs. Use a load balancer if possible.
+      - Create a subnet in each AZ for the gateway load balancer endpoints with routes to the IGW and VPC CIDR.
+      - Create an ingress subnet/route table attached to the IGW with routes to the appropriate gwlbe for each AZ.
+      - Create a public subnet and route table per AZ with routes to the appropriate GLBE and VPC CIDR. Add routes to the transit gateway if needed.
+      - Create additional route tables/subnets for private workloads with routes to the txgw.
