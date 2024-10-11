@@ -38,7 +38,7 @@
     set network virtual-router default interface ethernet1/1
     commit
     ```
-
+2. **Setup Spoke VPCS**:
     - Traffic is intrazone by default, and Palo Alto allows intrazone traffic. Use security groups to isolate traffic as needed.
     - Spokes should connect to the txgw, with routing handled automatically. Ensure the spoke has a default route to the txgw for private subnets.
     - For public ingress access in spoke subnets:
