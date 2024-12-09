@@ -4,6 +4,7 @@
 resource "aws_lb" "sec_gwlb" {
   name               = "sec-gwlb-${random_id.deployment_id.hex}"
   load_balancer_type = "gateway"
+  enable_cross_zone_load_balancing = true
 
   subnets    = [for i in range(2) : aws_subnet.pafw_data_subnet[i].id]
   depends_on = [aws_subnet.pafw_data_subnet]
@@ -17,6 +18,10 @@ resource "aws_lb_target_group" "sec_gwlb_tg" {
   health_check {
     port     = 443
     protocol = "TCP"
+    interval = 10  # Check every 10 seconds
+    timeout  = 5   # Timeout after 5 seconds
+    healthy_threshold   = 2  # Mark as healthy after 2 successful checks
+    unhealthy_threshold = 2  # Mark as unhealthy after 2 failed checks
   }
 }
 
