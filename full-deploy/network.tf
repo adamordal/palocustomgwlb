@@ -164,7 +164,14 @@ resource "aws_route_table" "gwlbe_ns_rt" {
     cidr_block         = "10.0.0.0/8"
     transit_gateway_id = data.aws_ec2_transit_gateway.transit_gw.id
   }
-
+  route {
+    cidr_block         = "172.16.0.0/12"
+    transit_gateway_id = data.aws_ec2_transit_gateway.transit_gw.id
+  }
+  route {
+    cidr_block         = "192.168.0.0/16"
+    transit_gateway_id = data.aws_ec2_transit_gateway.transit_gw.id
+  }
   tags = {
     Name = "gwlbe-ns-rt-${var.availability_zones[count.index]}-${random_id.deployment_id.hex}"
   }
@@ -191,6 +198,10 @@ resource "aws_route_table" "gwlbe_ew_rt" {
   }
   route {
     cidr_block         = "172.16.0.0/12"
+    transit_gateway_id = data.aws_ec2_transit_gateway.transit_gw.id
+  }
+  route {
+    cidr_block         = "192.168.0.0/16"
     transit_gateway_id = data.aws_ec2_transit_gateway.transit_gw.id
   }
 
@@ -239,7 +250,14 @@ resource "aws_route_table" "sec_txgw_rt" {
     cidr_block      = "10.0.0.0/8"
     vpc_endpoint_id = aws_vpc_endpoint.gwlbe_ew_endpoint[count.index].id
   }
-
+  route {
+    cidr_block      = "172.16.0.0/12"
+    vpc_endpoint_id = aws_vpc_endpoint.gwlbe_ew_endpoint[count.index].id
+  }
+  route {
+    cidr_block      = "192.168.0.0/16"
+    vpc_endpoint_id = aws_vpc_endpoint.gwlbe_ew_endpoint[count.index].id
+  }
   route {
     cidr_block      = "0.0.0.0/0"
     vpc_endpoint_id = aws_vpc_endpoint.gwlbe_ns_endpoint[count.index].id
@@ -273,7 +291,14 @@ resource "aws_route_table" "nat_rt" {
     cidr_block      = "10.0.0.0/8"
     vpc_endpoint_id = aws_vpc_endpoint.gwlbe_ns_endpoint[count.index].id
   }
-
+  route {
+    cidr_block      = "172.16.0.0/12"
+    vpc_endpoint_id = aws_vpc_endpoint.gwlbe_ns_endpoint[count.index].id
+  }
+  route {
+    cidr_block      = "192.168.0.0/16"
+    vpc_endpoint_id = aws_vpc_endpoint.gwlbe_ns_endpoint[count.index].id
+  }
   tags = {
     Name = "sec-nat-rt-${var.availability_zones[count.index]}-${random_id.deployment_id.hex}"
   }
