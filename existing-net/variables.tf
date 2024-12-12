@@ -2,18 +2,6 @@
 # MANDATORY PARAMETERS
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "access_key" {
-  description = "AWS Access Key"
-  type        = string
-  default     = ""
-}
-
-variable "secret_key" {
-  description = "AWS Secret Key"
-  type        = string
-  default     = ""
-}
-
 variable "region" {
   description = "AWS Region"
   type        = string
@@ -23,7 +11,6 @@ variable "availability_zones" {
   description = "Availability zones in a region to deploy instances on"
   type        = list(any)
 }
-
 
 variable "firewall_ami_id" {
   description = "VM-Series AMI ID BYOL/Bundle1/Bundle2 for the specified region"
@@ -35,9 +22,28 @@ variable "transit_gw_id" {
   type        = string
 }
 
-
 variable "key_pair" {
   description = "AWS SSH Key Pair Name"
+  type        = string
+}
+
+variable "vpc_id" {
+  description = "ID of the existing VPC"
+  type        = string
+}
+
+variable "existing_subnet_tag" {
+  description = "Tag for the existing subnets"
+  type        = string
+}
+
+variable "existing_route_table_tag" {
+  description = "Tag for the existing route tables"
+  type        = string
+}
+
+variable "existing_nat_gateway_tag" {
+  description = "Tag for the existing NAT gateways"
   type        = string
 }
 
@@ -45,6 +51,17 @@ variable "key_pair" {
 # OPTIONAL PARAMETERS
 # ---------------------------------------------------------------------------------------------------------------------
 
+variable "access_key" {
+  description = "AWS Access Key"
+  type        = string
+  default     = ""
+}
+
+variable "secret_key" {
+  description = "AWS Secret Key"
+  type        = string
+  default     = ""
+}
 
 variable "prefix" {
   description = "Deployment ID Prefix"
@@ -68,25 +85,4 @@ variable "instance_type" {
   description = "Instance type of the web server instances in ASG"
   type        = string
   default     = "m5.xlarge"
-}
-
-variable "vpc_id" {
-  description = "ID of the existing VPC"
-  type        = string
-}
-
-
-variable "existing_subnet_tag" {
-  description = "Tag for the existing subnets"
-  type        = string
-}
-
-variable "existing_route_table_tag" {
-  description = "Tag for the existing route tables"
-  type        = string
-}
-
-variable "existing_nat_gateway_tag" {
-  description = "Tag for the existing NAT gateways"
-  type        = string
 }
