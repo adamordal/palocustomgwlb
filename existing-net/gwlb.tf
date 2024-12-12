@@ -5,9 +5,7 @@ resource "aws_lb" "sec_gwlb" {
   name                             = "sec-gwlb-${random_id.deployment_id.hex}"
   load_balancer_type               = "gateway"
   enable_cross_zone_load_balancing = true
-
   subnets    = slice(local.pafw_data_subnets, 0, min(2, length(local.pafw_data_subnets)))
-  depends_on = []
 }
 
 resource "aws_lb_target_group" "sec_gwlb_tg" {
