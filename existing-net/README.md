@@ -7,6 +7,7 @@
     - Comment out `access_key` and `secret_key` in `main.tf` if omitted from the `tfvars` file.
     - Ensure the EC2 SSH keypair is created and downloaded. This will be used for SSH access later.
     - Update the AMI ID. Accept the Palo Alto firewall terms from the marketplace related to the AMI.
+    - Update the tag variables to match existing Name tags. Modify .tf files as necessary to match convention.
 
 2. **Subnet Requirements**:
     - This version expects the following to be in place.
