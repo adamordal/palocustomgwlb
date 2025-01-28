@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Setup permissions for the organization to assume role and modify VPC endpoint service permissions
+
+Parameters:
+  OrgID:
+    Type: String
+    Description: Enter the organization ID
+    Default: o-eybvod6i5k
+
+Resources:
+  EndpointServicePermissions:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: 'EndpointServicePermissions'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              AWS: '*'
+            Action: 'sts:AssumeRole'
+            Condition:
+              StringEquals:
+                aws:PrincipalOrgID: !Ref OrgID
+      Path: '/'
+      Policies:
+        - PolicyName: 'EndpointServicePermissionsPolicy'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: 'VisualEditor0'
+                Effect: 'Allow'
+                Action:
+                  - 'ec2:DescribeVpcEndpointServicePermissions'
+                  - 'ec2:ModifyVpcEndpointServicePermissions'
+                  - 'ec2:DescribeVpcEndpointServices'
+                  - 'ec2:DescribeVpcEndpointServiceConfigurations'
+                Resource: '*'
+      ManagedPolicyArns: []

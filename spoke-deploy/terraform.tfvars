@@ -1,0 +1,5 @@
+vpc_id                = "vpc-061e6f9dd5c6b3236"
+name_prefix           = "dev"
+endpoint_service_name = "com.amazonaws.vpce.us-west-1.vpce-svc-0160bec3022ed86f1"
+region                = "us-west-1"
+target_account_id     = "527458448792"
