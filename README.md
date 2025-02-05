@@ -21,7 +21,7 @@
     configure
     set mgt-config users admin password
     set network interface ethernet ethernet1/1 layer3 dhcp-client enable yes
-    set network interface ethernet ethernet1/1 layer3 dhcp-client accept-default-route yes
+    set network interface ethernet ethernet1/1 layer3 dhcp-client create-default-route yes
     set network profiles interface-management-profile https-healthcheck https yes
     set network interface ethernet ethernet1/1 layer3 interface-management-profile https-healthcheck
     set zone data network layer3 ethernet1/1
